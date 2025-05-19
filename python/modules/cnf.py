@@ -79,5 +79,6 @@ class CNF(BasicModule):
         cnf_bayer = np.clip(cnf_bayer, 0, self.cfg.saturation_values.hdr)
 
         data['bayer'] = cnf_bayer.astype(np.uint16)
+        data['cnf'] = data['bayer']
 
-        cv2.imwrite('./Image/after_cnf.jpg',data['bayer'])
+

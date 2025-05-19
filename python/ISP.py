@@ -3,37 +3,44 @@ import numpy as np
 from modules.pipeline import Pipeline
 from yacs import Config
 
+
 class ISP():
     def __init__(self,dir):
         self.dir = dir
-        self.img = cv2.imread(f"{self.dir}.jpg",cv2.IMREAD_UNCHANGED)
-        self.QUAD_IMG(self.img)
-        self.processing(self.LT, 'LT')
+        self.img = cv2.imread(f"{self.dir}/raw.jpg",cv2.IMREAD_UNCHANGED)
 
 
 
     def save(self):
         LT = cv2.cvtColor(self.LT['output'], cv2.COLOR_RGB2BGR)
-        cv2.imwrite(f"{self.dir}_LT.jpg", LT)
-        cv2.imwrite(f"{self.dir}_LB.jpg", self.LB)
-        cv2.imwrite(f"{self.dir}_RT.jpg", self.RT)
-        cv2.imwrite(f"{self.dir}_RB.jpg", self.RB)
+        cv2.imwrite(f"{self.dir}/img_LT.jpg", LT)
+        cv2.imwrite(f"{self.dir}/img_LB.jpg", self.LB)
+        cv2.imwrite(f"{self.dir}/img_RT.jpg", self.RT)
+        cv2.imwrite(f"{self.dir}/img_RB.jpg", self.RB)
 
-    def QUAD_IMG(self,img):
-        self.LT, self.LB, self.RT, self.RB = (np.zeros((img.shape[0]//4,img.shape[1])).astype(np.uint8),
-                                              np.zeros((img.shape[0]//4,img.shape[1])).astype(np.uint8),
-                                              np.zeros((img.shape[0]//4,img.shape[1])).astype(np.uint8),
-                                              np.zeros((img.shape[0]//4,img.shape[1])).astype(np.uint8))
-        for i in range(img.shape[0]//4):
-            self.LT[i,:] = img[4*i,:,0]
-            self.LB[i,:] = img[4*i+1,:,0]
-            self.RT[i,:] = img[4*i+2,:,0]
-            self.RB[i,:] = img[4*i+3,:,0]
+    def QUAD_IMG(self):
+        self.LT, self.LB, self.RT, self.RB = (np.zeros((self.img.shape[0]//4,self.img.shape[1])).astype(np.uint8),
+                                              np.zeros((self.img.shape[0]//4,self.img.shape[1])).astype(np.uint8),
+                                              np.zeros((self.img.shape[0]//4,self.img.shape[1])).astype(np.uint8),
+                                              np.zeros((self.img.shape[0]//4,self.img.shape[1])).astype(np.uint8))
+        for i in range(self.img.shape[0]//4):
+            self.LT[i,:] = self.img[4*i,:,0]
+            self.LB[i,:] = self.img[4*i+1,:,0]
+            self.RT[i,:] = self.img[4*i+2,:,0]
+            self.RB[i,:] = self.img[4*i+3,:,0]
 
-    def processing(self, img, tag):
-        cfg = Config('./python/samples/config/test.yaml')
-        pipeline = Pipeline(cfg, tag)
-        self.LT, _ = pipeline.execute(img)
+        self.quad_img = {'LT': self.LT,
+                         'LB': self.LB,
+                         'RT': self.RT,
+                         'RB': self.RB}
+
+
+    def processing(self, tag):
+        cfg = Config('./python/config/test.yaml')
+        pipeline = Pipeline(cfg, tag, self.dir)
+        self.LT, _ = pipeline.execute(self.quad_img[tag])
+
+     
 
 
 

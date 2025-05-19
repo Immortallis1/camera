@@ -27,5 +27,5 @@ class GAC(BasicModule):
         gac_rgb_image = self.lut[gac_rgb_image]
 
         data['rgb_image'] = gac_rgb_image
+        data['gac'] = data['rgb_image']
 
-        cv2.imwrite('./Image/after_gac.jpg',cv2.cvtColor(data['rgb_image'],cv2.COLOR_RGB2BGR))

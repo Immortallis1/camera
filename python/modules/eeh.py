@@ -48,5 +48,5 @@ class EEH(BasicModule):
         data['edge_map'] = delta
 
         ycbcr_image = np.dstack([data['y_image'][..., None], data['cbcr_image']])
-        out = ycbcr_to_rgb(ycbcr_image)
-        cv2.imwrite('./Image/after_eeh.jpg',cv2.cvtColor(out,cv2.COLOR_RGB2BGR))
+
+        data['eeh'] = cv2.cvtColor(ycbcr_to_rgb(ycbcr_image),cv2.COLOR_RGB2BGR)

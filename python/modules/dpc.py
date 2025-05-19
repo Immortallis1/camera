@@ -51,5 +51,6 @@ class DPC(BasicModule):
         dpc_bayer = reconstruct_bayer(dpc_sub_arrays, self.cfg.hardware.bayer_pattern)
 
         data['bayer'] = dpc_bayer.astype(np.uint16)
+        data['dpc'] = data['bayer']
 
-        cv2.imwrite('./Image/after_dpc.jpg',data['bayer'])
+

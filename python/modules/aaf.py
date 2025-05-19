@@ -32,4 +32,5 @@ class AAF(BasicModule):
 
         data['bayer'] = aaf_bayer.astype(np.uint16)
 
-        cv2.imwrite('./Image/after_aaf.jpg',data['bayer'])
+        data['aaf'] = data['bayer']
+

@@ -39,6 +39,6 @@ class HSC(BasicModule):
         data['cbcr_image'] = hsc_cbcr_image.astype(np.uint8)
 
         ycbcr_image = np.dstack([data['y_image'][..., None], data['cbcr_image']])
-        out = ycbcr_to_rgb(ycbcr_image)
-        cv2.imwrite('./Image/after_hsc.jpg',cv2.cvtColor(out,cv2.COLOR_RGB2BGR))
+ 
+        data['hsc'] = cv2.cvtColor(ycbcr_to_rgb(ycbcr_image),cv2.COLOR_RGB2BGR)
 

@@ -5,6 +5,8 @@ from PyQt5.QtWidgets import QLabel, QApplication, QWidget, QCheckBox, QMessageBo
 import numpy as np
 import cv2
 from ISP import ISP
+from datetime import datetime
+import os
 
 class MainWidget(QWidget):
     evtCallback = pyqtSignal(int)
@@ -341,9 +343,14 @@ class MainWidget(QWidget):
                     pass
                 else:
                     image = QImage(buf, info.width, info.height, QImage.Format_RGB888)
-                    self.count += 1
-                    image.save("./Image/pyqt{}.jpg".format(self.count))
-                    img = ISP(dir=f"./Image/pyqt{self.count}")
+
+                    result_dir = f'./Image/' + datetime.now().strftime("%m%d-%H%M%S")
+                    os.makedirs(result_dir, exist_ok=True)
+
+                    image.save("{}/raw.jpg".format(result_dir))
+                    img = ISP(dir=result_dir)
+                    img.QUAD_IMG()
+                    img.processing('LT')
                     img.save()
 
 

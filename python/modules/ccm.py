@@ -26,4 +26,6 @@ class CCM(BasicModule):
 
         data['rgb_image'] = ccm_rgb_image.astype(np.uint16)
 
-        cv2.imwrite('./Image/after_ccm.jpg',cv2.cvtColor(data['rgb_image'],cv2.COLOR_RGB2BGR))
+        data['ccm'] = data['rgb_image']
+
+

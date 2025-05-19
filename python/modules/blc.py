@@ -34,4 +34,6 @@ class BLC(BasicModule):
 
         data['bayer'] = np.clip(blc_bayer, 0, None).astype(np.uint16)
 
-        cv2.imwrite('./Image/after_blc.jpg',data['bayer'])
+        data['blc'] = data['bayer']
+
+

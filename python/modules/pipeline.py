@@ -22,12 +22,13 @@ from .basic_module import MODULE_DEPENDENCIES
 
 class Pipeline:
     """ Core fast-openISP pipeline """
-    def __init__(self, cfg, tag):
+    def __init__(self, cfg, tag, dir):
         """
         :param cfg: yacs.Config object, configurations about camera specs and module parameters
         """
         self.cfg = cfg
         self.tag = tag
+        self.dir = dir
 
         saturation_values = self.get_saturation_values()
         with self.cfg.unfreeze():
@@ -84,7 +85,7 @@ class Pipeline:
 
         return modules
 
-    def execute(self, bayer, save_intermediates=False, verbose=True):
+    def execute(self, bayer, save_intermediates=False, save_fig=True, verbose=True):
         """
         ISP pipeline execution
         :param bayer: input Bayer array, np.ndarray(H, W)
@@ -103,8 +104,8 @@ class Pipeline:
         pipeline_start = time.time()
 
         data = OrderedDict(bayer=bayer)
-        data['w'] = cv2.imread(f'./python/samples/config/w_{self.tag}.jpg', cv2.IMREAD_UNCHANGED)
-        data['b'] = cv2.imread(f'./python/samples/config/b_{self.tag}.jpg', cv2.IMREAD_UNCHANGED)
+        data['w'] = cv2.imread(f'./python/config/w_{self.tag}.jpg', cv2.IMREAD_UNCHANGED)
+        data['b'] = cv2.imread(f'./python/config/b_{self.tag}.jpg', cv2.IMREAD_UNCHANGED)
 
         intermediates = OrderedDict()
 
@@ -115,6 +116,9 @@ class Pipeline:
             module.execute(data)
             if save_intermediates:
                 intermediates[module_name] = copy.copy(data)
+
+            if save_fig:
+                cv2.imwrite(f'{self.dir}/{self.tag}_after_{module_name}.jpg', data[module_name])
 
             print_('Done. Elapsed {:.3f}s'.format(time.time() - start))
 

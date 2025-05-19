@@ -188,5 +188,6 @@ class CFA(BasicModule):
         rgb_image = np.clip(rgb_image, 0, self.cfg.saturation_values.hdr)
 
         data['rgb_image'] = rgb_image.astype(np.uint16)
+        data['cfa'] = data['rgb_image']
 
-        cv2.imwrite('./Image/after_cfa.jpg',cv2.cvtColor(data['rgb_image'],cv2.COLOR_RGB2BGR))
+

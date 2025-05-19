@@ -12,6 +12,6 @@ class FFC(BasicModule):
         bayer = (bayer - b) / (w - b) * np.mean(w - b)
 
         data['bayer'] = bayer.astype(np.uint16)
+        data['ffc'] = data['bayer']
 
-        cv2.imwrite('./Image/after_ffc.jpg',data['bayer'])
 

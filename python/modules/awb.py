@@ -35,5 +35,6 @@ class AWB(BasicModule):
         wb_bayer = np.clip(wb_bayer, 0, self.cfg.saturation_values.hdr)
 
         data['bayer'] = wb_bayer.astype(np.uint16)
+        data['awb'] = data['bayer']
 
-        cv2.imwrite('./Image/after_awb.jpg',data['bayer'])
+
